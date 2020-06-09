@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title></title>
+    {% load static %}
+
+    <link type="text/css" href="{% static 'css/index.css' %}" rel="stylesheet" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #242424;
+            text-align: center;
+        }
+
+        .bg {
+            width: 55%;
+            margin: 0 auto;
+            /*height:800px;*/
+        }
+
+        .h1, .h2 {
+            color: white;
+            font-size: 40px;
+        }
+
+            .h2 a {
+                color: white;
+                margin-left: 50px;
+            }
+
+        a {
+            text-decoration: none;
+        }
+
+        #container {
+            position: relative;
+        }
+
+        .line {
+            height: 3px;
+            width: 30px;
+            background-color: white;
+            margin-top: 3px;
+        }
+
+        .nav {
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        .btns {
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            height: 90%;
+            width: 15%;
+            background-color: #ddd7d7;
+            opacity: 0.5;
+        }
+
+            .btns ul li:nth-child(1) {
+                margin-top: 120px;
+            }
+
+            .btns ul li {
+                margin-top: 20px;
+                background-color: #e5e570
+            }
+
+        .right {
+            position: absolute;
+            right: 13%;
+            top: 20%;
+        }
+
+            .right p {
+                font-size: 27px;
+                color: white;
+                text-align: left;
+                line-height: 90px;
+            }
+
+            .right p2 {
+                font-size: 20px;
+                color: #e5e570;
+                text-align: left;
+                line-height: 45px;
+            }
+
+        #select:hover {
+            color: red;
+        }
+
+        li {
+        list-style:none;
+        }
+        .white a {
+        color:white;
+        }
+        .white {
+        margin-top:80px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <script src="/demos/googlegg.js"></script>
+
+    <div id="container">
+        <img class="bg" src="{% static 'images/bg.jpg' %}" alt="Alternate Text" />
+        <p>
+            <!-- <span class="h1">DRAG & DROP OR</span> -->
+            <!-- <span class="h2"><a href="javascript:uploadImage()" id="select"><u>SELECT AN IMAGE</u></a></span> -->
+            <!-- <input class="h2" type='file' accept='image/*' onchange='uploadImage(event)'> -->
+            <form class="h2" name = "image_form" id = "image_form" method = "post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {{ form.non_field_errors }}
+                <div class="fieldWrapper">
+                    {{ form.image.errors }}
+                    <label for="{{ form.image.id_for_label }}">Select an image: </label>
+                    {{ form.image }}
+                </div>
+
+
+                <!-- <input class="h2" type='file' accept='image/*' onchange='uploadImage()'> -->
+                <!-- <button class="h2" type="submit">Upload</button> -->
+                <span class="h2"><a href="javascript:uploadImage()" id="confirm">Confirm</a></span>
+            </form>
+        </p>
+
+        <div class="right">
+            <p>Image Size</p>
+            <p2>Size what?</p2>
+
+            <p>File Size</p>
+            <p2>Size what?</p2>
+
+            <p>Color</p>
+            <p2>Color what?</p2>
+        </div>
+        <div class="white">
+            <p>
+                <a href="#">© Yingke Ding No. 2017213199</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a>View Code on </a><a href="https://www.github.com/" target="_blank"><u>Github</u></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="mailto: dykderrick@bupt.edu.cn"><u>Email</u></a><a> me if any bugs</a>
+            </p>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        function uploadImage() {
+            // TODO: Show image
+            document.image_form.submit();
+        }
+    </script>
+
+
+
+
+
+    <div id="mintbar">
+        <a id="closebtn" href="#"><img src="{% static 'images/wd02.jpg' %}" /></a>
+    </div>
+
+    <div id="mint" style="display:none;position:absolute;top:0;right:0px;">
+
+        <div class="box-nav"id="btns">
+            <li><a href="#">关于我们</a></li>
+            <li><a href="#">产品展示</a></li>
+            <li><a href="#">案例展示</a></li>
+            <li><a href="#">新闻中心</a></li>
+            <li><a href="#">新闻资讯</a></li>
+            <li><a href="#">联系我们</a></li>
+        </div>
+        <img src="{% static 'images/wd07.png' %}" />
+    </div>
+
+
+    <script type="text/javascript" src="{% static 'js/jquery1.42.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            function anim(duration) {
+                $('#mint').animate(
+                    { height: 'toggle' },
+                    { duration: duration }
+                );
+            }
+            $('#closebtn').click(function () {
+                $('#mintbar').slideUp();
+                anim(600);
+            });
+
+            $('#mint').click(function () {
+                anim(600);
+                $('#mintbar').slideDown('slow');
+            });
+
+        });
+    </script>
+</body>
+</html>

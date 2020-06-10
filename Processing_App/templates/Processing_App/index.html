@@ -15,7 +15,7 @@
         }
 
         body {
-            background-color: #242424;
+            background-color: #202020;
             text-align: center;
         }
 
@@ -93,7 +93,7 @@
             .right p2 {
                 font-size: 20px;
                 color: #e5e570;
-                text-align: left;
+                text-align: start;
                 line-height: 45px;
             }
 
@@ -118,7 +118,11 @@
     <script src="/demos/googlegg.js"></script>
 
     <div id="container">
-        <img class="bg" src="{% static 'images/bg.jpg' %}" alt="Alternate Text" />
+        <!-- <img id = "main_image" class="bg" src="{% static 'images/bg.jpg' %}" alt="Alternate Text" /> -->
+
+        <!-- img.image.url: /images/user_upload_images/... .JPG -->
+        <!-- <img id="main_image" class="bg" src="{{ img.image.url }}" alt="Alternate Text"> -->
+        <img id="main_image" class="bg" src="{{ padded_image_url }}" alt="Alternate Text">
         <p>
             <!-- <span class="h1">DRAG & DROP OR</span> -->
             <!-- <span class="h2"><a href="javascript:uploadImage()" id="select"><u>SELECT AN IMAGE</u></a></span> -->
@@ -132,8 +136,6 @@
                     <label for="{{ form.image.id_for_label }}">Select an image: </label>
                     {{ form.image }}
                 </div>
-
-
                 <!-- <input class="h2" type='file' accept='image/*' onchange='uploadImage()'> -->
                 <!-- <button class="h2" type="submit">Upload</button> -->
                 <span class="h2"><a href="javascript:uploadImage()" id="confirm">Confirm</a></span>
@@ -142,18 +144,18 @@
 
         <div class="right">
             <p>Image Size</p>
-            <p2>Size what?</p2>
+            <p2>{{ image_size }}</p2>
 
             <p>File Size</p>
-            <p2>Size what?</p2>
+            <p2>{{ file_size}}</p2>
 
             <p>Color</p>
-            <p2>Color what?</p2>
+            <p2>{{ rgb_percentages}}</p2>
         </div>
         <div class="white">
             <p>
                 <a href="#">© Yingke Ding No. 2017213199</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <a>View Code on </a><a href="https://www.github.com/" target="_blank"><u>Github</u></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a>View Code on </a><a href="https://github.com/dykderrick/Simple-Image-Processing-Web-App/tree/master/Processing_App" target="_blank"><u>Github</u></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <a href="mailto: dykderrick@bupt.edu.cn"><u>Email</u></a><a> me if any bugs</a>
             </p>
         </div>
@@ -162,7 +164,6 @@
 
     <script type="text/javascript">
         function uploadImage() {
-            // TODO: Show image
             document.image_form.submit();
         }
     </script>
@@ -178,12 +179,12 @@
     <div id="mint" style="display:none;position:absolute;top:0;right:0px;">
 
         <div class="box-nav"id="btns">
-            <li><a href="#">关于我们</a></li>
-            <li><a href="#">产品展示</a></li>
-            <li><a href="#">案例展示</a></li>
-            <li><a href="#">新闻中心</a></li>
-            <li><a href="#">新闻资讯</a></li>
-            <li><a href="#">联系我们</a></li>
+            <li><a href="#">功能1</a></li>
+            <li><a href="#">功能2</a></li>
+            <li><a href="#">功能3</a></li>
+            <li><a href="#">功能4</a></li>
+            <li><a href="#">功能5</a></li>
+            <li><a href="#">功能6</a></li>
         </div>
         <img src="{% static 'images/wd07.png' %}" />
     </div>

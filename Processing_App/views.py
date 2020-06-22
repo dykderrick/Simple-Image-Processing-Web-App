@@ -22,7 +22,7 @@ def _get_padded_image():
 
     image_path = img.image.path
 
-    is_saved, padded_image_url = padding.ImagePadding(image_path).save_padded_image()
+    is_saved, padded_image_url = padding.PaddedImage(image_path).save_processed_image()
     if is_saved:
         return {
             'img': img,
@@ -70,7 +70,7 @@ def _get_equalized_padded_image():
 
     equalized_is_saved, equalized_save_path = histogram_equalization.HistogramEqualizeImage(image_path).save_processed_image()
     if equalized_is_saved:
-        padded_is_saved, padded_image_url = padding.ImagePadding(equalized_save_path).save_padded_image()
+        padded_is_saved, padded_image_url = padding.PaddedImage(image_path).save_processed_image()
 
     if padded_is_saved:
         return {
@@ -106,7 +106,7 @@ def _get_grayed_padded_image(gray_scale_value):
 
     grayed_is_saved, grayed_save_path = gray_scale.GrayImage(image_path, gray_scale_value).save_processed_image()
     if grayed_is_saved:
-        padded_is_saved, padded_image_url = padding.ImagePadding(grayed_save_path).save_padded_image()
+        padded_is_saved, padded_image_url = padding.PaddedImage(image_path).save_processed_image()
 
     if padded_is_saved:
         return {

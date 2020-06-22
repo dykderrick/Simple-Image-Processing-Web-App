@@ -10,4 +10,5 @@ from . import views
 app_name = 'Processing_App'
 urlpatterns = [
     path('', views.index, name='index'),
+    path('equalized_image', views.equalized_image_index, name='index'),
 ]

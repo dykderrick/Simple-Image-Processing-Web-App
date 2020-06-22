@@ -177,6 +177,10 @@
         function laplacian() {
             document.laplacian.submit();
         }
+
+        function smoothing() {
+            document.smoothing.submit();
+        }
     </script>
 
 
@@ -204,9 +208,12 @@
                 <li><a href="javascript:laplacian()">Laplacian</a></li>
             </form>
 
+            <form id="smoothing" name="smoothing" action="/smoothed_image" method="get">
+                <li><a href="javascript:smoothing()">Smoothing</a></li>
+            </form>
 
 
-            <li><a href="#">功能4</a></li>
+
             <li><a href="#">功能5</a></li>
             <li><a href="#">功能6</a></li>
         </div>

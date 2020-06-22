@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from .forms import ImageForm
 from .models import UserUploadPhoto
-from .processing_scripts import retrieve_image_info, padding, histogram_equalization, gray_scale, laplacian_derivative
+from .processing_scripts import retrieve_image_info, padding, histogram_equalization, gray_scale, laplacian_derivative, smoothing
 
 
 def _get_form(request):
@@ -159,6 +159,42 @@ def laplacian_image_index(request):
 
     # Get laplacian version of last upload image in context for rendering to the page
     image_context = _get_laplacian_padded_image()
+
+    # Get image info context to be inserted
+    image_info_context = _get_image_info(image_context['img'].image.path)
+
+    # Merge dicts
+    context = {**image_context, **form_context, **image_info_context}
+
+    return render(request, 'Processing_App/index.html', context)
+
+
+def _get_smoothed_padded_image():
+    padded_is_saved, padded_image_url = (False, None)  # init
+
+    img = UserUploadPhoto.objects.all().last()  # the last uploaded photo
+
+    image_path = img.image.path
+
+    smoothed_is_saved, smoothed_save_path = smoothing.SmoothedImage(image_path).save_processed_image()
+    if smoothed_is_saved:
+        padded_is_saved, padded_image_url = padding.PaddedImage(smoothed_save_path).save_processed_image()
+
+    if padded_is_saved:
+        return {
+            'img': img,
+            'padded_image_url': padded_image_url
+        }
+    else:
+        return None
+
+
+def smoothed_image_index(request):
+    # Construct the image uploading form
+    form_context = _get_form(request)
+
+    # Get smoothed version of last upload image in context for rendering to the page
+    image_context = _get_smoothed_padded_image()
 
     # Get image info context to be inserted
     image_info_context = _get_image_info(image_context['img'].image.path)

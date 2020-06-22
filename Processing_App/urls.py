@@ -13,4 +13,5 @@ urlpatterns = [
     path('equalized_image', views.equalized_image_index, name='index'),
     path('grayed_image', views.grayed_image_index, name='index'),
     path('laplacian_image', views.laplacian_image_index, name='index'),
+    path('smoothed_image', views.smoothed_image_index, name='index'),
 ]

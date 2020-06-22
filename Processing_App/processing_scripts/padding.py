@@ -12,7 +12,7 @@ from Simple_Image_Processing_Web_App import settings
 
 
 class ImagePadding:
-    def __init__(self, image_path, pad_w, pad_h):
+    def __init__(self, image_path, pad_w=700, pad_h=520):
         if pad_w < 500 or pad_h < 500:
             raise Exception("PAD ERROR")
 

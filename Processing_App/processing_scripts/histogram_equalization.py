@@ -4,23 +4,18 @@
 # @Author  : Yingke Ding
 # @File    : histogram_equalization.py
 # @Software: PyCharm
-import os
-
 import cv2
 import numpy as np
 
-from Simple_Image_Processing_Web_App import settings
+from Processing_App.processing_scripts.image import Image
 
 
-class HistogramEqualizeImage:
+class HistogramEqualizeImage(Image):
     def __init__(self, image_path):
-        self._image_file_name = os.path.splitext(image_path)[0].split("/")[-1]
-        self._image_file_type = os.path.splitext(image_path)[-1]  # include "."  e.g. "IMG.jpeg" -> ".jpeg"
-        self._image_path = image_path
+        super().__init__(image_path, "EQUALIZED")
+        self._process()
 
-        self._set_histogram_equalization_image()
-
-    def _set_histogram_equalization_image(self):
+    def _process(self):
         img = cv2.imread(self._image_path)
         gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -41,11 +36,4 @@ class HistogramEqualizeImage:
             equalized_row_pixels = [lookup_table[pixel] for pixel in row_pixels]
             equalized_pixels.append(equalized_row_pixels)
 
-        self.equalized_image = np.array(equalized_pixels, dtype=np.uint8)
-
-    def save_equalized_image(self):
-        save_path = settings.MEDIA_ROOT + "/user_upload_images/" + self._image_file_name + "_EQUALIZED" + self._image_file_type
-
-        cv2.imwrite(save_path, self.equalized_image)
-
-        return os.path.exists(save_path), save_path
+        self.processed_image = np.array(equalized_pixels, dtype=np.uint8)

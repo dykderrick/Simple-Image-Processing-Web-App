@@ -13,7 +13,7 @@ from Processing_App.processing_scripts.image import Image
 class GrayImage(Image):
     def __init__(self, image_path, gray_scale):
         super().__init__(image_path, str(gray_scale) + "GRAYED")
-        self._gray_scale = gray_scale
+        self._gray_scale = int(gray_scale)
 
         self._process()
 

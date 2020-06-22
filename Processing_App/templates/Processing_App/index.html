@@ -129,7 +129,6 @@
             <!-- <input class="h2" type='file' accept='image/*' onchange='uploadImage(event)'> -->
             <form class="h2" name = "image_form" id = "image_form" method = "post" enctype="multipart/form-data">
                 {% csrf_token %}
-
                 {{ form.non_field_errors }}
                 <div class="fieldWrapper">
                     {{ form.image.errors }}
@@ -168,7 +167,11 @@
         }
 
         function equalized() {
-            document.equalized.submit()
+            document.equalized.submit();
+        }
+
+        function grayed() {
+            document.grayed.submit();
         }
     </script>
 
@@ -182,16 +185,17 @@
 
     <div id="mint" style="display:none;position:absolute;top:0;right:0px;">
 
-        <div class="box-nav"id="btns">
-            <!-- <li><a href="#">功能1</a></li> -->
-
+        <div class="box-nav" id="btns">
             <form id="equalized" name="equalized" action="/equalized_image" method="get">
                 <li><a href="javascript:equalized()">Equalization</a></li>
             </form>
 
+            <form id="gray" name="grayed" action="/grayed_image" method="get">
+                <li><input id="gray_input" style="height: 25px" type="text" name="gray_input" value="128" size="3" maxLength="3"><a href="javascript:grayed()"> Gray</a></li>
+            </form>
 
 
-            <li><a href="#">功能2</a></li>
+
             <li><a href="#">功能3</a></li>
             <li><a href="#">功能4</a></li>
             <li><a href="#">功能5</a></li>

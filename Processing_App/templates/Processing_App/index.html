@@ -173,6 +173,10 @@
         function grayed() {
             document.grayed.submit();
         }
+
+        function laplacian() {
+            document.laplacian.submit();
+        }
     </script>
 
 
@@ -191,12 +195,17 @@
             </form>
 
             <form id="gray" name="grayed" action="/grayed_image" method="get">
-                <li><input id="gray_input" style="height: 25px" type="text" name="gray_input" value="128" size="3" maxLength="3"><a href="javascript:grayed()"> Gray</a></li>
+                <li>
+                    <input id="gray_input" style="height: 25px" type="text" name="gray_input" value="128" size="3" maxLength="3"><a href="javascript:grayed()"> Gray</a>
+                </li>
+            </form>
+
+            <form id="laplacian" name="laplacian" action="/laplacian_image" method="get">
+                <li><a href="javascript:laplacian()">Laplacian</a></li>
             </form>
 
 
 
-            <li><a href="#">功能3</a></li>
             <li><a href="#">功能4</a></li>
             <li><a href="#">功能5</a></li>
             <li><a href="#">功能6</a></li>

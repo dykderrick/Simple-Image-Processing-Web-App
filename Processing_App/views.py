@@ -2,11 +2,11 @@ from django.shortcuts import render
 
 from .forms import ImageForm
 from .models import UserUploadPhoto
-from .processing_scripts import retrieve_image_info, padding, histogram_equalization, gray_scale
+from .processing_scripts import retrieve_image_info, padding, histogram_equalization, gray_scale, laplacian_derivative
 
 
 def _get_form(request):
-    if request.method == 'POST':
+    if request.method == 'POST':  # user click confirm
         form = ImageForm(request.POST, request.FILES)
 
         if form.is_valid():
@@ -70,7 +70,7 @@ def _get_equalized_padded_image():
 
     equalized_is_saved, equalized_save_path = histogram_equalization.HistogramEqualizeImage(image_path).save_processed_image()
     if equalized_is_saved:
-        padded_is_saved, padded_image_url = padding.PaddedImage(image_path).save_processed_image()
+        padded_is_saved, padded_image_url = padding.PaddedImage(equalized_save_path).save_processed_image()
 
     if padded_is_saved:
         return {
@@ -106,7 +106,7 @@ def _get_grayed_padded_image(gray_scale_value):
 
     grayed_is_saved, grayed_save_path = gray_scale.GrayImage(image_path, gray_scale_value).save_processed_image()
     if grayed_is_saved:
-        padded_is_saved, padded_image_url = padding.PaddedImage(image_path).save_processed_image()
+        padded_is_saved, padded_image_url = padding.PaddedImage(grayed_save_path).save_processed_image()
 
     if padded_is_saved:
         return {
@@ -121,8 +121,44 @@ def grayed_image_index(request):
     # Construct the image uploading form
     form_context = _get_form(request)
 
-    # Get last upload image in context for rendering to the page
+    # Get grayed last upload image in context for rendering to the page
     image_context = _get_grayed_padded_image(request.GET.get('gray_input'))
+
+    # Get image info context to be inserted
+    image_info_context = _get_image_info(image_context['img'].image.path)
+
+    # Merge dicts
+    context = {**image_context, **form_context, **image_info_context}
+
+    return render(request, 'Processing_App/index.html', context)
+
+
+def _get_laplacian_padded_image():
+    padded_is_saved, padded_image_url = (False, None)  # init
+
+    img = UserUploadPhoto.objects.all().last()  # the last uploaded photo
+
+    image_path = img.image.path
+
+    laplacian_is_saved, laplacian_save_path = laplacian_derivative.LaplacianImage(image_path).save_processed_image()
+    if laplacian_is_saved:
+        padded_is_saved, padded_image_url = padding.PaddedImage(laplacian_save_path).save_processed_image()
+
+    if padded_is_saved:
+        return {
+            'img': img,
+            'padded_image_url': padded_image_url
+        }
+    else:
+        return None
+
+
+def laplacian_image_index(request):
+    # Construct the image uploading form
+    form_context = _get_form(request)
+
+    # Get laplacian version of last upload image in context for rendering to the page
+    image_context = _get_laplacian_padded_image()
 
     # Get image info context to be inserted
     image_info_context = _get_image_info(image_context['img'].image.path)

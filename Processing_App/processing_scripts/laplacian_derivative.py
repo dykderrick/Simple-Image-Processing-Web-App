@@ -6,18 +6,16 @@
 # @Software: PyCharm
 import cv2
 
-
-def get_laplacian_image(img_path):
-    img = cv2.imread(img_path)
-
-    laplacian = cv2.Laplacian(img, cv2.CV_64F)  # TODO needs to be modified
-
-    return laplacian
+from Processing_App.processing_scripts.image import Image
 
 
-if __name__ == '__main__':
-    result = get_laplacian_image("./images/IMG_0185.JPG")
+class LaplacianImage(Image):
+    def __init__(self, image_path):
+        super().__init__(image_path, "LAPLACIAN")
 
-    cv2.imshow("Image", result)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+        self.set_laplacian_image()
+
+    def set_laplacian_image(self):
+        img = cv2.imread(self._image_path)
+
+        self.processed_image = cv2.Laplacian(img, cv2.CV_64F)  # TODO needs to be modified

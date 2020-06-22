@@ -166,6 +166,10 @@
         function uploadImage() {
             document.image_form.submit();
         }
+
+        function equalized() {
+            document.equalized.submit()
+        }
     </script>
 
 
@@ -179,7 +183,14 @@
     <div id="mint" style="display:none;position:absolute;top:0;right:0px;">
 
         <div class="box-nav"id="btns">
-            <li><a href="#">功能1</a></li>
+            <!-- <li><a href="#">功能1</a></li> -->
+
+            <form id="equalized" name="equalized" action="/equalized_image" method="get">
+                <li><a href="javascript:equalized()">Equalization</a></li>
+            </form>
+
+
+
             <li><a href="#">功能2</a></li>
             <li><a href="#">功能3</a></li>
             <li><a href="#">功能4</a></li>

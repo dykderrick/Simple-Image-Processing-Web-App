@@ -20,8 +20,13 @@ def _rotate_k_meaning(k):
 
 
 class RotatedImage(Image):
+    """
+    This class defines image rotation process.
+    """
+
     def __init__(self, image_path, rotate_k):
         """
+        Constructor.
         :param image_path:
         :param rotate_k: Number of times the array is rotated by 90 degrees.
         """
@@ -31,7 +36,6 @@ class RotatedImage(Image):
         self._process()
 
     def _process(self, axes=(0, 1)):
-        # TODO need to be modified
         """
         :param axes: The array is rotated in the plane defined by the axes.
         :return:

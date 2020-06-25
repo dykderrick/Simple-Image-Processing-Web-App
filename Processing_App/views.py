@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from .forms import ImageForm
 from .models import UserUploadPhoto
-from .processing_scripts import retrieve_image_info, padding, histogram_equalization, gray_scale, laplacian_derivative, smoothing
+from .processing_scripts import retrieve_image_info, padding, histogram_equalization, gray_scale, laplacian_derivative, smoothing, resize
 
 
 def _get_form(request):
@@ -32,10 +32,10 @@ def _get_padded_image():
         return None
 
 
-def _get_image_info(image_path):
+def _get_image_info(image_path, is_gray_image=False):
     # current_img_path = _get_padded_image()['img'].image.path
 
-    return retrieve_image_info.ImageInfo(image_path).info_getter()
+    return retrieve_image_info.ImageInfo(image_path, is_gray_image).info_getter()
 
 
 def index(request):
@@ -74,7 +74,7 @@ def _get_equalized_padded_image():
 
     if padded_is_saved:
         return {
-            'img': img,
+            'unpad_img_path': equalized_save_path,
             'padded_image_url': padded_image_url
         }
     else:
@@ -89,7 +89,7 @@ def equalized_image_index(request):
     image_context = _get_equalized_padded_image()
 
     # Get image info context to be inserted
-    image_info_context = _get_image_info(image_context['img'].image.path)
+    image_info_context = _get_image_info(image_context['unpad_img_path'], is_gray_image=True)
 
     # Merge dicts
     context = {**image_context, **form_context, **image_info_context}
@@ -110,7 +110,7 @@ def _get_grayed_padded_image(gray_scale_value):
 
     if padded_is_saved:
         return {
-            'img': img,
+            'unpad_img_path': grayed_save_path,
             'padded_image_url': padded_image_url
         }
     else:
@@ -125,7 +125,7 @@ def grayed_image_index(request):
     image_context = _get_grayed_padded_image(request.GET.get('gray_input'))
 
     # Get image info context to be inserted
-    image_info_context = _get_image_info(image_context['img'].image.path)
+    image_info_context = _get_image_info(image_context['unpad_img_path'], is_gray_image=True)
 
     # Merge dicts
     context = {**image_context, **form_context, **image_info_context}
@@ -146,7 +146,7 @@ def _get_laplacian_padded_image():
 
     if padded_is_saved:
         return {
-            'img': img,
+            'unpad_img_path': laplacian_save_path,
             'padded_image_url': padded_image_url
         }
     else:
@@ -161,7 +161,7 @@ def laplacian_image_index(request):
     image_context = _get_laplacian_padded_image()
 
     # Get image info context to be inserted
-    image_info_context = _get_image_info(image_context['img'].image.path)
+    image_info_context = _get_image_info(image_context['unpad_img_path'], is_gray_image=True)
 
     # Merge dicts
     context = {**image_context, **form_context, **image_info_context}
@@ -195,6 +195,42 @@ def smoothed_image_index(request):
 
     # Get smoothed version of last upload image in context for rendering to the page
     image_context = _get_smoothed_padded_image()
+
+    # Get image info context to be inserted
+    image_info_context = _get_image_info(image_context['img'].image.path)
+
+    # Merge dicts
+    context = {**image_context, **form_context, **image_info_context}
+
+    return render(request, 'Processing_App/index.html', context)
+
+
+def _get_resized_padded_image(scale_percent):
+    padded_is_saved, padded_image_url = (False, None)  # init
+
+    img = UserUploadPhoto.objects.all().last()  # the last uploaded photo
+
+    image_path = img.image.path
+
+    resized_is_saved, resized_save_path = resize.ResizedImage(image_path, scale_percent).save_processed_image()
+    if resized_is_saved:
+        padded_is_saved, padded_image_url = padding.PaddedImage(resized_save_path).save_processed_image()
+
+    if padded_is_saved:
+        return {
+            'img': img,
+            'padded_image_url': padded_image_url
+        }
+    else:
+        return None
+
+
+def resized_image_index(request, resize_input):
+    # Construct the image uploading form
+    form_context = _get_form(request)
+
+    # Get resized version of last upload image in context for rendering to the page
+    image_context = _get_resized_padded_image(resize_input)
 
     # Get image info context to be inserted
     image_info_context = _get_image_info(image_context['img'].image.path)

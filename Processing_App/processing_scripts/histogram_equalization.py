@@ -11,11 +11,27 @@ from Processing_App.processing_scripts.image import Image
 
 
 class HistogramEqualizeImage(Image):
+    """
+    This class inherits from Image.
+    Will calc histogram equalized image of an image.
+    """
+
     def __init__(self, image_path):
+        """
+        Constructor.
+        Specify process_type with "EQUALIZED".
+        :param image_path:
+        """
         super().__init__(image_path, "EQUALIZED")
         self._process()
 
     def _process(self):
+        """
+        Overwritten method.
+        Histogram equalization makes each gray pixel in a gray level image to be equally distributed.
+        Use Algorithm 5.1 in Chapter 4.2.
+        :return:
+        """
         img = cv2.imread(self._image_path)
         gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 

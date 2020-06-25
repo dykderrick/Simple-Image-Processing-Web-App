@@ -10,7 +10,16 @@ from Processing_App.processing_scripts.image import Image
 
 
 class ResizedImage(Image):
+    """
+    This class defines a process of resizing an image.
+    """
+
     def __init__(self, image_path, scale_percent):
+        """
+        Constructor.
+        :param image_path:
+        :param scale_percent: 1 to 100 of resize scale.
+        """
         self._scale_percent = int(float(scale_percent) * 100)
 
         super().__init__(image_path, str(self._scale_percent) + "RESIZED")
@@ -18,6 +27,11 @@ class ResizedImage(Image):
         self._process(self._scale_percent)
 
     def _process(self, scale_percent=50):
+        """
+        Overwritten method.
+        :param scale_percent:
+        :return:
+        """
         img = cv2.imread(self._image_path)
 
         # calculate the 50 percent of original dimensions

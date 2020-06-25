@@ -118,15 +118,8 @@
     <script src="/demos/googlegg.js"></script>
 
     <div id="container">
-        <!-- <img id = "main_image" class="bg" src="{% static 'images/bg.jpg' %}" alt="Alternate Text" /> -->
-
-        <!-- img.image.url: /images/user_upload_images/... .JPG -->
-        <!-- <img id="main_image" class="bg" src="{{ img.image.url }}" alt="Alternate Text"> -->
         <img id="main_image" class="bg" src="{{ padded_image_url }}" alt="Alternate Text">
         <p>
-            <!-- <span class="h1">DRAG & DROP OR</span> -->
-            <!-- <span class="h2"><a href="javascript:uploadImage()" id="select"><u>SELECT AN IMAGE</u></a></span> -->
-            <!-- <input class="h2" type='file' accept='image/*' onchange='uploadImage(event)'> -->
             <form class="h2" name = "image_form" id = "image_form" method = "post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.non_field_errors }}
@@ -135,9 +128,7 @@
                     <label for="{{ form.image.id_for_label }}">Select an image: </label>
                     {{ form.image }}
                 </div>
-                <!-- <input class="h2" type='file' accept='image/*' onchange='uploadImage()'> -->
-                <!-- <button class="h2" type="submit">Upload</button> -->
-                <span class="h2"><a href="javascript:uploadImage()" id="confirm">Confirm</a></span>
+                <span class="h2"><a href="javascript:document.image_form.submit();" id="confirm">Confirm</a></span>
             </form>
         </p>
 
@@ -146,10 +137,10 @@
             <p2>{{ image_size }}</p2>
 
             <p>File Size</p>
-            <p2>{{ file_size}}</p2>
+            <p2>{{ file_size }}</p2>
 
             <p>Color</p>
-            <p2>{{ color_percentages}}</p2>
+            <p2>{{ color_percentages }}</p2>
         </div>
         <div class="white">
             <p>
@@ -162,36 +153,20 @@
 
 
     <script type="text/javascript">
-        function uploadImage() {
-            document.image_form.submit();
-        }
-
-        function equalized() {
-            document.equalized.submit();
-        }
-
-        function grayed() {
-            document.grayed.submit();
-        }
-
-        function laplacian() {
-            document.laplacian.submit();
-        }
-
-        function smoothing() {
-            document.smoothing.submit();
-        }
-
-        function resized() {
-            document.resized.submit();
-        }
-
         function resizeRedirect() {
             // Because resize input may contain a dot, the get method has to modify redirected url to wrap dot.
 
             // Use window.location.href to make the action redirect to another page. Then collected by Django urls.
             // See reference: https://blog.csdn.net/weixin_40279966/article/details/79154976
             window.location.href = document.getElementById('resize_input').value.toString() + '/resized_image';
+        }
+
+        function leftRotatedRedirect() {
+            window.location.href = "{{ last_image_name }}" + '/{{ last_image_type }}' + '/left90';
+        }
+
+        function rightRotatedRedirect() {
+            window.location.href = "{{ last_image_name }}" + '/{{ last_image_type }}' + '/right90';
         }
 
     </script>
@@ -205,28 +180,40 @@
 
         <div class="box-nav" id="btns">
             <form id="equalized" name="equalized" action="/equalized_image" method="get">
-                <li><a href="javascript:equalized()">Equalization</a></li>
+                <li><a href="javascript:document.equalized.submit();">Equalization</a></li>
             </form>
 
             <form id="gray" name="grayed" action="/grayed_image" method="get">
                 <li>
-                    <input id="gray_input" style="height: 25px" type="text" name="gray_input" value="128" size="3" maxLength="3"><a href="javascript:grayed()"> Gray</a>
+                    <input id="gray_input" style="height: 25px" type="text" name="gray_input" value="128" size="3" maxLength="3">
+                    <a href="javascript:document.grayed.submit();"> Gray</a>
                 </li>
             </form>
 
             <form id="laplacian" name="laplacian" action="/laplacian_image" method="get">
-                <li><a href="javascript:laplacian()">Laplacian</a></li>
+                <li><a href="javascript:document.laplacian.submit();">Laplacian</a></li>
             </form>
 
             <form id="smoothing" name="smoothing" action="/smoothed_image" method="get">
-                <li><a href="javascript:smoothing()">Smoothing</a></li>
+                <li><a href="javascript:document.smoothing.submit();">Smoothing</a></li>
             </form>
 
 
             <form id="resize" name="resized" action="javascript:resizeRedirect()" method="get">
                 <li>
-                    <input id="resize_input" style="height: 25px" type="text" name="resize_input" value="0.5" size="4" maxLength="4"><a href="javascript:resized()"> Resize</a>
+                    <input id="resize_input" style="height: 25px"
+                           type="text" name="resize_input" value="0.5" size="4" maxLength="4">
+                    <a href="javascript:document.resized.submit();"> Resize</a>
                 </li>
+            </form>
+
+
+            <form id="left_rotate" name="left_rotate" action="javascript:leftRotatedRedirect()" method="get">
+                <li><a href="javascript:document.left_rotate.submit();">left</a></li>
+            </form>
+
+            <form id="right_rotate" name="right_rotate" action="javascript:rightRotatedRedirect()" method="get">
+                <li><a href="javascript:document.right_rotate.submit();">right</a></li>
             </form>
 
 

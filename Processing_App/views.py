@@ -1,8 +1,11 @@
+import os
+
 from django.shortcuts import render
 
+from Simple_Image_Processing_Web_App import settings
 from .forms import ImageForm
 from .models import UserUploadPhoto
-from .processing_scripts import retrieve_image_info, padding, histogram_equalization, gray_scale, laplacian_derivative, smoothing, resize
+from .processing_scripts import retrieve_image_info, padding, histogram_equalization, gray_scale, laplacian_derivative, smoothing, resize, rotate
 
 
 def _get_form(request):
@@ -21,11 +24,15 @@ def _get_padded_image():
     img = UserUploadPhoto.objects.all().last()  # the last uploaded photo
 
     image_path = img.image.path
+    image_name = os.path.splitext(image_path)[0].split("/")[-1]
+    image_type = os.path.splitext(image_path)[-1]  # include "."  e.g. "IMG.jpeg" -> ".jpeg"
 
     is_saved, padded_image_url = padding.PaddedImage(image_path).save_processed_image()
     if is_saved:
         return {
-            'img': img,
+            'last_image_path': image_path,
+            'last_image_name': image_name,
+            'last_image_type': image_type,
             'padded_image_url': padded_image_url
         }
     else:
@@ -53,7 +60,7 @@ def index(request):
     image_context = _get_padded_image()
 
     # Get image info context to be inserted
-    image_info_context = _get_image_info(image_context['img'].image.path)
+    image_info_context = _get_image_info(image_context['last_image_path'])
 
     # Merge dicts
     context = {**image_context, **form_context, **image_info_context}
@@ -231,6 +238,49 @@ def resized_image_index(request, resize_input):
 
     # Get resized version of last upload image in context for rendering to the page
     image_context = _get_resized_padded_image(resize_input)
+
+    # Get image info context to be inserted
+    image_info_context = _get_image_info(image_context['unpad_img_path'])
+
+    # Merge dicts
+    context = {**image_context, **form_context, **image_info_context}
+
+    return render(request, 'Processing_App/index.html', context)
+
+
+def _get_90rotated_padded_image(last_image_path, rotate_k):
+    padded_is_saved, padded_image_url = (False, None)  # init
+
+    rotated90_is_saved, rotated90_save_path = rotate.RotatedImage(last_image_path, rotate_k).save_processed_image()
+    if rotated90_is_saved:
+        padded_is_saved, padded_image_url = padding.PaddedImage(rotated90_save_path).save_processed_image()
+
+    if padded_is_saved:
+        image_name = os.path.splitext(rotated90_save_path)[0].split("/")[-1]
+        image_type = os.path.splitext(rotated90_save_path)[-1]  # include "."  e.g. "IMG.jpeg" -> ".jpeg"
+        return {
+            'last_image_path': rotated90_save_path,
+            'last_image_name': image_name,
+            'last_image_type': image_type,
+            'unpad_img_path': rotated90_save_path,
+            'padded_image_url': padded_image_url
+        }
+    else:
+        return None
+
+
+def rotate90_image_index(request, last_image_name, last_image_type, rotate_type):
+    if str(rotate_type) == 'left90':
+        rotate_k = 1  # left rotate 90 degree
+    else:
+        rotate_k = 3  # left rotate 270 degree (right 90 degree)
+
+    # Construct the image uploading form
+    form_context = _get_form(request)
+
+    last_image_path = settings.MEDIA_ROOT + '/user_upload_images/' + last_image_name + last_image_type
+
+    image_context = _get_90rotated_padded_image(last_image_path, rotate_k)
 
     # Get image info context to be inserted
     image_info_context = _get_image_info(image_context['unpad_img_path'])

@@ -11,14 +11,25 @@ from Processing_App.processing_scripts.image import Image
 
 
 class SmoothedImage(Image):
+    """
+    This class defines a process of smoothing the raw image.
+    """
+
     def __init__(self, image_path):
         super().__init__(image_path, "SMOOTHED")
 
-        self._set_smooth_image()
+        self._process()
 
-    def _set_smooth_image(self):
+    def _process(self):
+        """
+        Overwritten method.
+        Will use box filter.
+        :return:
+        """
         img = cv2.imread(self._image_path)
 
-        kernel = np.ones((5, 5), np.float32) / 25
+        # defines a box filter.
+        kernel = np.ones((3, 3), np.float32) / 9
 
-        self.processed_image = cv2.filter2D(img, -1, kernel)  # TODO needs to be refactored
+        # use OpenCV build-in method to calc convolution.
+        self.processed_image = cv2.filter2D(img, -1, kernel)

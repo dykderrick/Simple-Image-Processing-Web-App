@@ -11,7 +11,16 @@ import numpy as np
 
 
 class ImageInfo:
+    """
+    This class gets image's file size, height, width, and color info of an image.
+    """
+
     def __init__(self, img_path, is_gray_image=False):
+        """
+        Constructor.
+        :param img_path:
+        :param is_gray_image: if True, color info will be different.
+        """
         self._img_path = img_path
         self._is_gray_image = is_gray_image
 
@@ -20,7 +29,6 @@ class ImageInfo:
         self._set_color_info()
 
     def _set_file_size(self):
-        # TODO: Needs to be refactored to KB, MB...
         self._file_size = str(os.path.getsize(self._img_path)) + " Bytes"
 
     def _set_image_size(self):
@@ -28,7 +36,7 @@ class ImageInfo:
         self._img_size = str(shape[1]) + " x " + str(shape[0])
 
     def _set_color_info(self):
-        if not self._is_gray_image:  # colorful
+        if not self._is_gray_image:  # colorful image
             # TODO: Needs to be reconsidered
             image = cv2.imread(self._img_path)
             rs = []
@@ -46,7 +54,7 @@ class ImageInfo:
                                 "G: " + str(round((sum(gs) / (len(gs) * 255)), 3)) + ", " + \
                                 "B: " + str(round((sum(bs) / (len(bs) * 255)), 3))
 
-        else:  # gray level
+        else:  # gray level image
             image = cv2.imread(self._img_path, cv2.IMREAD_GRAYSCALE)
 
             mean = np.mean(np.array(image))

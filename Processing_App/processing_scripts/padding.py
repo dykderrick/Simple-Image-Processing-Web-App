@@ -13,7 +13,20 @@ from Simple_Image_Processing_Web_App import settings
 
 
 class PaddedImage(Image):
+    """
+    This class inherits from Image.
+    Will pad background color to every image for the app.
+    """
+
     def __init__(self, image_path, pad_w=700, pad_h=520):
+        """
+        Pad size will be 720 by 520 by default.
+        :param image_path:
+        :param pad_w: width of padded image
+        :param pad_h: height of padded image
+        """
+
+        # cannot be less than (500, 500)
         if pad_w < 500 or pad_h < 500:
             raise Exception("PAD ERROR")
 
@@ -25,6 +38,10 @@ class PaddedImage(Image):
         self._process()
 
     def _process(self):
+        """
+        Overwritten method.
+        :return:
+        """
         img = cv2.imread(self._image_path)
 
         # Resize to under (500, 500)
@@ -45,10 +62,16 @@ class PaddedImage(Image):
         self.processed_image[yy:yy + ht, xx:xx + wd] = img
 
     def save_processed_image(self):
-        save_path = settings.MEDIA_ROOT + "/user_upload_images/" + self._image_file_name + "_PADDED" + self._image_file_type
+        """
+        Overwritten method.
+        Will return a url other than absolute path because of rendering to html.
+        :return:
+        """
+        save_path = \
+            settings.MEDIA_ROOT + "/user_upload_images/" + self._image_file_name + "_PADDED" + self._image_file_type
 
-        if not os.path.exists(save_path):
-            cv2.imwrite(save_path, self.processed_image)
+        cv2.imwrite(save_path, self.processed_image)
 
         padded_url = "/images/user_upload_images/" + self._image_file_name + "_PADDED" + self._image_file_type
+
         return os.path.exists(save_path), padded_url

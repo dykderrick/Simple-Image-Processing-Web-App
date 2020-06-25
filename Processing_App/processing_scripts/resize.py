@@ -6,21 +6,24 @@
 # @Software: PyCharm
 import cv2
 
-
-def resize(image_path, scale_percent=50):
-    img = cv2.imread(image_path)
-
-    # calculate the 50 percent of original dimensions
-    width = int(img.shape[1] * scale_percent / 100)
-    height = int(img.shape[0] * scale_percent / 100)
-
-    dsize = (width, height)
-
-    return cv2.resize(img, dsize)
+from Processing_App.processing_scripts.image import Image
 
 
-if __name__ == '__main__':
-    result = resize("./images/IMG_0185.JPG", scale_percent=20)
-    cv2.imshow("Image", result)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+class ResizedImage(Image):
+    def __init__(self, image_path, scale_percent):
+        self._scale_percent = int(float(scale_percent) * 100)
+
+        super().__init__(image_path, str(self._scale_percent) + "RESIZED")
+
+        self._process(self._scale_percent)
+
+    def _process(self, scale_percent=50):
+        img = cv2.imread(self._image_path)
+
+        # calculate the 50 percent of original dimensions
+        width = int(img.shape[1] * scale_percent / 100)
+        height = int(img.shape[0] * scale_percent / 100)
+
+        dsize = (width, height)
+
+        self.processed_image = cv2.resize(img, dsize)

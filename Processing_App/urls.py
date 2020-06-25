@@ -3,6 +3,7 @@
 # @Author  : Yingke Ding
 # @FileName: urls.py
 # @Software: PyCharm
+from django.conf.urls import url
 from django.urls import path
 
 from . import views
@@ -14,4 +15,8 @@ urlpatterns = [
     path('grayed_image', views.grayed_image_index, name='index'),
     path('laplacian_image', views.laplacian_image_index, name='index'),
     path('smoothed_image', views.smoothed_image_index, name='index'),
+
+    # For resize function, only allow 0.01-0.99 (1 or 2 digit)
+    url(r'^(?P<resize_input>\d+\.\d)/resized_image$', views.resized_image_index),
+    url(r'^(?P<resize_input>\d+\.\d{2})/resized_image$', views.resized_image_index),
 ]

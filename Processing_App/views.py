@@ -182,7 +182,7 @@ def _get_smoothed_padded_image():
 
     if padded_is_saved:
         return {
-            'img': img,
+            'unpad_img_path': smoothed_save_path,
             'padded_image_url': padded_image_url
         }
     else:
@@ -197,7 +197,7 @@ def smoothed_image_index(request):
     image_context = _get_smoothed_padded_image()
 
     # Get image info context to be inserted
-    image_info_context = _get_image_info(image_context['img'].image.path)
+    image_info_context = _get_image_info(image_context['unpad_img_path'])
 
     # Merge dicts
     context = {**image_context, **form_context, **image_info_context}
@@ -218,7 +218,7 @@ def _get_resized_padded_image(scale_percent):
 
     if padded_is_saved:
         return {
-            'img': img,
+            'unpad_img_path': resized_save_path,
             'padded_image_url': padded_image_url
         }
     else:
@@ -233,7 +233,7 @@ def resized_image_index(request, resize_input):
     image_context = _get_resized_padded_image(resize_input)
 
     # Get image info context to be inserted
-    image_info_context = _get_image_info(image_context['img'].image.path)
+    image_info_context = _get_image_info(image_context['unpad_img_path'])
 
     # Merge dicts
     context = {**image_context, **form_context, **image_info_context}

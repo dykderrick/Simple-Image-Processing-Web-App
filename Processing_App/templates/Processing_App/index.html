@@ -149,7 +149,7 @@
             <p2>{{ file_size}}</p2>
 
             <p>Color</p>
-            <p2>{{ rgb_percentages}}</p2>
+            <p2>{{ color_percentages}}</p2>
         </div>
         <div class="white">
             <p>
@@ -181,10 +181,20 @@
         function smoothing() {
             document.smoothing.submit();
         }
+
+        function resized() {
+            document.resized.submit();
+        }
+
+        function resizeRedirect() {
+            // Because resize input may contain a dot, the get method has to modify redirected url to wrap dot.
+
+            // Use window.location.href to make the action redirect to another page. Then collected by Django urls.
+            // See reference: https://blog.csdn.net/weixin_40279966/article/details/79154976
+            window.location.href = document.getElementById('resize_input').value.toString() + '/resized_image';
+        }
+
     </script>
-
-
-
 
 
     <div id="mintbar">
@@ -210,6 +220,13 @@
 
             <form id="smoothing" name="smoothing" action="/smoothed_image" method="get">
                 <li><a href="javascript:smoothing()">Smoothing</a></li>
+            </form>
+
+
+            <form id="resize" name="resized" action="javascript:resizeRedirect()" method="get">
+                <li>
+                    <input id="resize_input" style="height: 25px" type="text" name="resize_input" value="0.5" size="4" maxLength="4"><a href="javascript:resized()"> Resize</a>
+                </li>
             </form>
 
 

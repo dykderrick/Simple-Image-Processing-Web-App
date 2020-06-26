@@ -1,3 +1,4 @@
 Django~=2.2.6
 opencv-python~=4.1.0.25
 numpy~=1.17.2
+fs~=2.4.11

@@ -8,6 +8,7 @@ import os
 
 import cv2
 import numpy as np
+from fs import filesize
 
 
 class ImageInfo:
@@ -29,7 +30,8 @@ class ImageInfo:
         self._set_color_info()
 
     def _set_file_size(self):
-        self._file_size = str(os.path.getsize(self._img_path)) + " Bytes"
+        # self._file_size = str(os.path.getsize(self._img_path)) + " Bytes"
+        self._file_size = filesize.traditional(os.path.getsize(self._img_path))
 
     def _set_image_size(self):
         shape = cv2.imread(self._img_path).shape

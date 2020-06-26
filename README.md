@@ -12,3 +12,4 @@ Preferable ```Django``` version is 2.2.6. Use ```numpy``` for self implementing 
 python3 manage.py runserver 8000
 ```
 After seeing initiating log, go to http://127.0.0.1:8000/ to see the website homepage.
+Preferable browser is Chrome, Firefox and Safari.

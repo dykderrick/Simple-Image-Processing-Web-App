@@ -25,13 +25,15 @@ def _get_padded_image():
     img = UserUploadPhoto.objects.all().last()  # the last uploaded photo
 
     image_path = img.image.path
+    image_url = img.image.url
     image_name = os.path.splitext(image_path)[0].split("/")[-1]
     image_type = os.path.splitext(image_path)[-1]  # include "."  e.g. "IMG.jpeg" -> ".jpeg"
 
     is_saved, padded_image_url = padding.PaddedImage(image_path).save_processed_image()
     if is_saved:
         return {
-            'last_image_path': image_path,
+            'unpad_img_path': image_path,
+            'unpad_img_url': image_url,
             'last_image_name': image_name,
             'last_image_type': image_type,
             'padded_image_url': padded_image_url
@@ -61,7 +63,7 @@ def index(request):
     image_context = _get_padded_image()
 
     # Get image info context to be inserted
-    image_info_context = _get_image_info(image_context['last_image_path'])
+    image_info_context = _get_image_info(image_context['unpad_img_path'])
 
     # Merge dicts
     context = {**image_context, **form_context, **image_info_context}
@@ -77,12 +79,14 @@ def _get_equalized_padded_image():
     image_path = img.image.path
 
     equalized_is_saved, equalized_save_path = histogram_equalization.HistogramEqualizeImage(image_path).save_processed_image()
+    equalized_save_url = equalized_save_path[59:]  # delete absolute path prefix
     if equalized_is_saved:
         padded_is_saved, padded_image_url = padding.PaddedImage(equalized_save_path).save_processed_image()
 
     if padded_is_saved:
         return {
             'unpad_img_path': equalized_save_path,
+            'unpad_img_url': equalized_save_url,
             'padded_image_url': padded_image_url
         }
     else:
@@ -113,12 +117,14 @@ def _get_grayed_padded_image(gray_scale_value):
     image_path = img.image.path
 
     grayed_is_saved, grayed_save_path = gray_scale.GrayImage(image_path, gray_scale_value).save_processed_image()
+    grayed_save_url = grayed_save_path[59:]
     if grayed_is_saved:
         padded_is_saved, padded_image_url = padding.PaddedImage(grayed_save_path).save_processed_image()
 
     if padded_is_saved:
         return {
             'unpad_img_path': grayed_save_path,
+            'unpad_img_url': grayed_save_url,
             'padded_image_url': padded_image_url
         }
     else:
@@ -149,12 +155,14 @@ def _get_laplacian_padded_image():
     image_path = img.image.path
 
     laplacian_is_saved, laplacian_save_path = laplacian_derivative.LaplacianImage(image_path).save_processed_image()
+    laplacian_save_url = laplacian_save_path[59:]
     if laplacian_is_saved:
         padded_is_saved, padded_image_url = padding.PaddedImage(laplacian_save_path).save_processed_image()
 
     if padded_is_saved:
         return {
             'unpad_img_path': laplacian_save_path,
+            'unpad_img_url': laplacian_save_url,
             'padded_image_url': padded_image_url
         }
     else:
@@ -185,12 +193,14 @@ def _get_smoothed_padded_image():
     image_path = img.image.path
 
     smoothed_is_saved, smoothed_save_path = smoothing.SmoothedImage(image_path).save_processed_image()
+    smoothed_save_url = smoothed_save_path[59:]
     if smoothed_is_saved:
         padded_is_saved, padded_image_url = padding.PaddedImage(smoothed_save_path).save_processed_image()
 
     if padded_is_saved:
         return {
             'unpad_img_path': smoothed_save_path,
+            'unpad_img_url': smoothed_save_url,
             'padded_image_url': padded_image_url
         }
     else:
@@ -221,12 +231,14 @@ def _get_resized_padded_image(scale_percent):
     image_path = img.image.path
 
     resized_is_saved, resized_save_path = resize.ResizedImage(image_path, scale_percent).save_processed_image()
+    resized_save_url = resized_save_path[59:]
     if resized_is_saved:
         padded_is_saved, padded_image_url = padding.PaddedImage(resized_save_path).save_processed_image()
 
     if padded_is_saved:
         return {
             'unpad_img_path': resized_save_path,
+            'unpad_img_url': resized_save_url,
             'padded_image_url': padded_image_url
         }
     else:
@@ -253,6 +265,7 @@ def _get_90rotated_padded_image(last_image_path, rotate_k):
     padded_is_saved, padded_image_url = (False, None)  # init
 
     rotated90_is_saved, rotated90_save_path = rotate.RotatedImage(last_image_path, rotate_k).save_processed_image()
+    rotated90_save_url = rotated90_save_path[59:]
     if rotated90_is_saved:
         padded_is_saved, padded_image_url = padding.PaddedImage(rotated90_save_path).save_processed_image()
 
@@ -264,6 +277,7 @@ def _get_90rotated_padded_image(last_image_path, rotate_k):
             'last_image_name': image_name,
             'last_image_type': image_type,
             'unpad_img_path': rotated90_save_path,
+            'unpad_img_url': rotated90_save_url,
             'padded_image_url': padded_image_url
         }
     else:

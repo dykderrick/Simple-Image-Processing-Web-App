@@ -118,7 +118,10 @@
     <script src="/demos/googlegg.js"></script>
 
     <div id="container">
-        <img id="main_image" class="bg" src="{{ padded_image_url }}" alt="Alternate Text">
+        <a href="{{ unpad_img_url }}" download>
+            <img id="main_image" class="bg" src="{{ padded_image_url }}" alt="Alternate Text">
+        </a>
+
         <p>
             <form class="h2" name = "image_form" id = "image_form" method = "post" enctype="multipart/form-data">
                 {% csrf_token %}

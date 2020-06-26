@@ -5,7 +5,8 @@ from django.shortcuts import render
 from Simple_Image_Processing_Web_App import settings
 from .forms import ImageForm
 from .models import UserUploadPhoto
-from .processing_scripts import retrieve_image_info, padding, histogram_equalization, gray_scale, laplacian_derivative, smoothing, resize, rotate
+from .processing_scripts import retrieve_image_info, padding, histogram_equalization, \
+    gray_scale, laplacian_derivative, smoothing, resize, rotate
 
 
 def _get_form(request):

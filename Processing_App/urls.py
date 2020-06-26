@@ -12,9 +12,9 @@ app_name = 'Processing_App'
 urlpatterns = [
     path('', views.index, name='index'),
     path('equalized_image', views.equalized_image_index, name='index'),
-    path('grayed_image', views.grayed_image_index, name='index'),
-    path('laplacian_image', views.laplacian_image_index, name='index'),
-    path('smoothed_image', views.smoothed_image_index, name='index'),
+    path('grayed_image', views.grayed_image_index, name='index_gray'),
+    path('laplacian_image', views.laplacian_image_index, name='index_laplacian'),
+    path('smoothed_image', views.smoothed_image_index, name='index_smooth'),
 
     # For resize function, only allow 0.01-0.99 (1 or 2 digit)
     url(r'^(?P<resize_input>\d+\.\d)/resized_image$', views.resized_image_index),

@@ -36,6 +36,11 @@ class ImageInfo:
         self._img_size = str(shape[1]) + " x " + str(shape[0])
 
     def _set_color_info(self):
+        """
+        This method actually doesn't have practical meaning.
+        Just read 3 channels of an image, and traverse every pixel, get average value for each channel.
+        :return:
+        """
         if not self._is_gray_image:  # colorful image
             # TODO: Needs to be reconsidered
             image = cv2.imread(self._img_path)
@@ -50,18 +55,15 @@ class ImageInfo:
                     gs.append(pixel[1])
                     bs.append(pixel[2])
 
-            self._percentages = "R: " + str(round((sum(rs) / (len(rs) * 255)), 3)) + ", " + \
-                                "G: " + str(round((sum(gs) / (len(gs) * 255)), 3)) + ", " + \
-                                "B: " + str(round((sum(bs) / (len(bs) * 255)), 3))
+            self._percentages = "Avg(R): " + str(int(sum(rs) / len(rs))) + ", " + \
+                                "Avg(G): " + str(int(sum(gs) / len(rs))) + ", " + \
+                                "Avg(B): " + str(int(sum(bs) / len(rs)))
 
         else:  # gray level image
             image = cv2.imread(self._img_path, cv2.IMREAD_GRAYSCALE)
 
-            mean = np.mean(np.array(image))
-            black_percent = round(mean / 256, 3)
-            white_percent = 1 - black_percent
-
-            self._percentages = "B: " + str(black_percent) + ", W: " + str(white_percent)
+            mean = float(np.mean(np.array(image)))
+            self._percentages = "Avg(pixel): " + str(round(mean, 2))
 
     def _get_file_size(self):
         return self._file_size

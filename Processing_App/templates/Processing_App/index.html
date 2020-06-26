@@ -128,7 +128,7 @@
                     <label for="{{ form.image.id_for_label }}">Select an image: </label>
                     {{ form.image }}
                 </div>
-                <span class="h2"><a href="javascript:document.image_form.submit();" id="confirm">Confirm</a></span>
+                <span class="h2"><a href="javascript:uploadRedirect()" id="confirm">Confirm</a></span>
             </form>
         </p>
 
@@ -153,6 +153,10 @@
 
 
     <script type="text/javascript">
+        function uploadRedirect() {
+            document.image_form.submit();
+        }
+
         function resizeRedirect() {
             // Because resize input may contain a dot, the get method has to modify redirected url to wrap dot.
 

@@ -42,9 +42,9 @@ class LaplacianImage(Image):
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         laplace_filter = np.array([
-            [0, 1, 0],
-            [1, -4, 1],
-            [0, 1, 0],
+            [0, -1, 0],
+            [-1, 4, -1],
+            [0, -1, 0],
         ])
 
         m, n = gray.shape

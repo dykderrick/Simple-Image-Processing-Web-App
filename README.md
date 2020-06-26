@@ -5,7 +5,10 @@ BUPT Information Processing Final Coursework - Build an Application to Operate S
 ```commandline
 pip install -r requirements.txt
 ```
-Preferable ```Django``` version is 2.2.6. Use ```numpy``` for self implementing image processing tasks. Use ```opencv-python``` for image reading and some basic operations.
+Preferable ```Django``` version is 2.2.6. 
+Use ```numpy``` for self implementing image processing tasks. 
+Use ```opencv-python``` for image reading and some basic operations. 
+Use ```fs``` for calculating file size.
 
 ## Run
 ```commandline

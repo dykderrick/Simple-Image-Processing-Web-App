@@ -12,6 +12,8 @@ Use ```fs``` for calculating file size.
 
 ## Run
 ```commandline
+cd Simple_Image_Processing_Web_App
+
 python3 manage.py runserver 8000
 ```
 After seeing initiating log, go to http://127.0.0.1:8000/ to see the website homepage.

@@ -42,7 +42,6 @@ class ImageInfo:
         :return:
         """
         if not self._is_gray_image:  # colorful image
-            # TODO: Needs to be reconsidered
             image = cv2.imread(self._img_path)
             rs = []
             gs = []
